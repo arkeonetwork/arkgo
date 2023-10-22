@@ -4,26 +4,24 @@ metadata:
   name: arkeonetwork
   namespace: argocd
 spec: 
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
   generators: 
-    - git: 
-        repoURL: https://github.com/arkeonetwork/helm-charts.git
-        revision: HEAD
-        directories: 
-          - path: '*'
+  - git: 
+      repoURL: https://github.com/arkeonetwork/helm-charts.git
+      revision: HEAD
+      directories: 
+      - path: '*'
   template: 
     metadata: 
-      name: '{{.path.basename}}'
+      name: '{{path.basename}}'
     spec: 
-      project: default
+      project: arkeo
       sources: 
         - repoURL: https://github.com/arkeonetwork/helm-charts.git
           targetRevision: HEAD
-          path: '{{.path.path}}'
+          path: '{{path}}'
       destination: 
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{path.basename}}'
       syncPolicy: 
         automated:
           prune: true

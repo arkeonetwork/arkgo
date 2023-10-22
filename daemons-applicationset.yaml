@@ -4,48 +4,46 @@ metadata:
   name: daemons
   namespace: argocd
 spec: 
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
   generators: 
-    - git:
-        repoURL: https://gitlab.com/thorchain/devops/node-launcher.git
-        revision: HEAD
-        directories:
-          - path: '*'
-          - path: '.*'
-            exclude: true
-          - path: ci
-            exclude: true
-          - path: loki
-            exclude: true
-          - path: docs
-            exclude: true
-          - path: mirroring
-            exclude: true
-          - path: prometheus
-            exclude: true
-          - path: scripts
-            exclude: true
-          - path: metrics-server
-            exclude: true
-          - path: kubernetes-dashboard
-            exclude: true
+  - git:
+      repoURL: https://gitlab.com/thorchain/devops/node-launcher.git
+      revision: HEAD
+      directories:
+      - path: '*'
+      - path: '.*'
+        exclude: true
+      - path: ci
+        exclude: true
+      - path: loki
+        exclude: true
+      - path: docs
+        exclude: true
+      - path: mirroring
+        exclude: true
+      - path: prometheus
+        exclude: true
+      - path: scripts
+        exclude: true
+      - path: metrics-server
+        exclude: true
+      - path: kubernetes-dashboard
+        exclude: true
   template: 
     metadata: 
-      name: '{{.path.basename}}'
+      name: '{{path.basename}}'
     spec: 
-      project: default
+      project: daemons
       sources: 
         - repoURL: https://gitlab.com/thorchain/devops/node-launcher.git
           targetRevision: HEAD
-          path: '{{.path.path}}'
+          path: '{{path}}'
           helm:
             parameters:
             - name: "persistence.storageClass"
               value: microk8s-hostpath
       destination: 
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{path.basename}}'
       syncPolicy: 
         automated:
           prune: true
