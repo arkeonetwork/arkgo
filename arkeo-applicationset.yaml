@@ -4,6 +4,8 @@ metadata:
   name: arkeonetwork
   namespace: argocd
 spec: 
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators: 
   - git: 
       repoURL: https://github.com/arkeonetwork/helm-charts.git
@@ -12,16 +14,20 @@ spec:
       - path: '*'
   template: 
     metadata: 
-      name: '{{path.basename}}'
+      name: '{{.path.basename}}'
     spec: 
-      project: arkeo
+      project: default
       sources: 
         - repoURL: https://github.com/arkeonetwork/helm-charts.git
           targetRevision: HEAD
-          path: '{{path}}'
+          path: '{{.path.path}}'
+          helm:
+            parameters:
+            - name: "etherscan_api_key"
+              value: 
       destination: 
         server: https://kubernetes.default.svc
-        namespace: '{{path.basename}}'
+        namespace: '{{.path.basename}}'
       syncPolicy: 
         automated:
           prune: true
