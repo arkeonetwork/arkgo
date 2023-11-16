@@ -4,13 +4,15 @@ metadata:
   name: daemons
   namespace: argocd
 spec: 
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators: 
   - git:
       repoURL: https://gitlab.com/thorchain/devops/node-launcher.git
       revision: HEAD
       directories:
       - path: '*'
-      - path: '.*'
+      - path: '*.'
         exclude: true
       - path: ci
         exclude: true
@@ -32,7 +34,7 @@ spec:
     metadata: 
       name: '{{.path.basename}}'
     spec: 
-      project: daemons
+      project: default
       sources: 
         - repoURL: https://gitlab.com/thorchain/devops/node-launcher.git
           targetRevision: HEAD
@@ -40,7 +42,7 @@ spec:
           helm:
             parameters:
             - name: "persistence.storageClass"
-              value: microk8s-hostpath
+              value: 
       destination: 
         server: https://kubernetes.default.svc
         namespace: '{{.path.basename}}'

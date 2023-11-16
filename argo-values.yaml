@@ -4,7 +4,7 @@ configs:
   #This is bcrypt hashed `htpasswd -nbBC 10 "" $ARKEO | tr -d ':\n' | sed 's/$2y/$2a/'`
     argocdServerAdminPassword: ""
 notifications:
-  argocdURL: ""
+  argocdURL: "127.0.0.1:30080"
   secret:
     items:
       discord-url: ""
